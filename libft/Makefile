@@ -15,8 +15,8 @@ BONUS			=	ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c ft_lstadd_back
 BONUS_OBJS		= $(BONUS:.c=.o)
 
 
-CC			= gcc
-RM			= rm -f
+CC				= gcc
+RM				= rm -f
 
 CFLAGS			= -Wall -Wextra -Werror -I.
 
@@ -35,7 +35,7 @@ clean:
 fclean:			clean
 				rm -f $(NAME)
 
-re:			fclean $(NAME)
+re:				fclean $(NAME)
 
 
 bonus:			$(OBJS) $(BONUS_OBJS)
