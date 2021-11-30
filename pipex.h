@@ -7,6 +7,9 @@
 # include <fcntl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include <libft.h>
+# include "libft/libft.h"
+# include <stdio.h>
+# include <errno.h>
+
 
 #endif
