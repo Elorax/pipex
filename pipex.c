@@ -1,112 +1,112 @@
 #include "pipex.h"
 
+/*Evite des crash en cas de double free*/
 
-void	pipex(int f1, int f2, char *cmd1, char *cmd2)
+void	ft_safe_free(void *ptr)
 {
-	//f1, f2 are two file descriptors.
-	int		end[2];
-	int		status;
-	pid_t	child1;
-	pid_t	child2;
+	free(*ptr);
+	ptr = NULL;
+}
 
-	pipe(end);
-	child1 = fork();
-	if (child1 < 0)
-		return (perror("Fork : "));
-	if (child1 == 0)
-		child_one_process(f1, cmd1);
-	child2 = fork();
-	if (child2 < 0)
-		return (perror("Fork : "));
-	if (child2 == 0)
-		child_two_process(f2, cmd2);
-	close(end[0]);
-	close(end[1]);
-	waitpid(child1, &status, 0);	//Waiting for childrens to finish tasks
-	waitpid(child2, &status, 0);
+void	ft_free_split(char	**s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		ft_safe_free(s[i])
+		i++;
+	}
+	ft_safe_free(s);
+}
 
 
-
-
-	parent = fork();
-	if (parent < 0)		//Error
-		return(perror("Fork: "));
-	if (!parent)	//Means we are in the child process
-		child_process(f1, cmd1);	//the child writes in the pipe so cmd1 executed by child.
-	else			//Means we are in the parent process.
-		parent_process(f2, cmd2);	//The parent reads in the pipe so cmd2 executed by parent.
+void	ft_start_cmd(t_pipex *data, char **cmd)
+{
+	data->input_temp_cmd = cmd[0];
+	if (access(cmd[0], F_OK) == 0 && f
 
 }
 
-static char	*ft_strjoin(char *s1, char *s2);
+
+void	ft_exec_cmd_one(t_pipex *data)
 {
-	char	*dest;
-	dest = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (!dest)
+
+	if (dup2(data->fd_infile, 0) < 0)
+	{
+		//Gerer l'erreur
+		close(0);
+		exit(EXIT_FAILURE);
+	}
+	dup2(data->fd_tube[1], 1);	//On remplace stdout par l'extremite d'ecriture du tube
+	close(data->fd_infile);		//On ferme le fichier infile
+	close(data->fd_tube[0]);	//On ferme l'extremite de lecture du tube.
+	ft_start_cmd(data, data->cmd1);
+}
+
+void	ft_exex_cmd_two(t_pipex *data)
+{
+	dup2(data->fd_outfile, 1);	//dup2 de fd outfil et stdout
+	dup2(data->fd_tube[0], 0);	//dup2 de tube[0] et stdin
+	//tube[0] est l'extremite de lecture. tube[1] celle d'ecriture.
+	close(data->fd_tube[1]);
+	close(data->fd_outfile);
+	ft_start_cmd(data, input->cmd2);
+}
+
+int	ft_initialize_pipex(t_pipex *data, char **av, char **env)
+{
+	
+	pipe(data->fd_tube);	//compran pa vremans
+	data->status_file1 = 0;
+	data->status_code = 0;
+
+	data->fd_infile = open(av[1], O_RDONLY);
+	if (access(av[1], F_OK) == -1)		//maybe R_OK
+		return (-1);
+	data->fd_outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC 0644);
+	if (access(av[4], F_OK) == -1)		//maybe W_OK
+		return (-1);
+	data->av = av;
+	data->envp = env;
+	data->cmd1 = ft_split(av[2], ' ');
+	if (!(data->cmd1))
+		return (-1);
+	data->cmd2 = ft_split(av[3], ' ');
+	if (!(data->cmd2))
+	{
+		ft_free_split(data->cmd1);
 		return (NULL);
-	while (*s1)
-		*dest++ = *s1++;
-	while (*s2)
-		*dest++ = *s2++;
-	*dest = 0;
-	return (dest);
-}
-
-
-void	child_process(int f1, char **av, char **env)
-{
-	char	**path;
-
-	path = ft_split(env[13], ':');
-	cmds = ft_split(av[2], ' ');
-	i = -1;
-	while(mypaths[++i])
-	{
-		cmd1 = ft_strjoin(mypaths);
-
 	}
+	data->pid_cmd1 = fork();
+	if (data->pid_cmd1 < 0)
+		return(perror("Fork : "));
+	if (pid_cmd1 == 0)
+		ft_exec_cmd_one(data);
+	data->pid_cmd2 = fork();
+	if (data->pid_cmd2 < 0)
+		return(perror("Fork : "));
+	if (data->pid_cmd2 == 0)
+		ft_exec_cmd_two(data);
+	close(data->fd_tube[0]);	//On ferme l'input
+	close(data->fd_tube[1]);	//On ferme l'output
+	waitpid(data->pid_cmd1, &(data->status_code), 0);	//parentheses ?
+	waitpid(data->pid_cmd2, &(data->status_code), 0);	//parentheses ?
 }
 
-int pipex(int f1, int f2, char **av, char **env)
-{
-	char	**path;
-	char	**cmds;
-	char	*cmd1;
-	int		i;
-	int		end[2];
-	pid_t	parent;
-
-	parent = fork();
-	if (!parent)
-
-	pipe(end);
-	path = ft_split(env[13], ':');
-	//PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/usr/local/munki
-	cmds = ft_split(av[2], ' ');
-	i = -1;
-	while (mypaths[++i])
-	{
-		cmd1 = ft_strjoin(my_paths[i], av[2]);
-		if (!cmd1)
-			return (-42);
-		execve(cmd, mycmdargs, env);
-		//perror("Error calling execve");
-		free(cmd);
-	}
-	return (EXIT_FAILURE);
-}
-
-typedef struct t_
 int main(int ac, char **av, char **env)
 {
-	int		fd1;
-	int		fd2;
-
+	t_pipex	data;
 	if (ac != 5)
 	{
 		printf("Mauvais nombre d'arguments\n");
 		return 0;
 	}
+	ft_initialize_pipex(&data, av, env);
+
+
+
 	fd1 = open(argv[1], O_RDONLY);
 	if (fd1 == -1)
 		return(perror("Open : "));
