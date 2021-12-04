@@ -31,6 +31,7 @@ typedef struct s_pipex
 	int	path_to_use;
 }	t_pipex;
 
+void	ft_pipex(t_pipex *data);
 void	ft_start_cmd(t_pipex *data, char **cmd_args);
 void	ft_exec_cmd_one(t_pipex *data);
 void	ft_exec_cmd_two(t_pipex *data);
