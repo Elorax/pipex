@@ -6,7 +6,7 @@
 /*   By: abiersoh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 19:12:13 by abiersoh          #+#    #+#             */
-/*   Updated: 2021/12/04 20:11:42 by abiersoh         ###   ########.fr       */
+/*   Updated: 2021/12/04 20:32:32 by abiersoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,28 +165,6 @@ void	ft_initialize_pipex(t_pipex *data, char **av, char **env)
 	if (!(data->cmd2))
 		return ;//Erreur a gerer
 	ft_pipex(data);
-	/* Duplication du programme 
-	data->pid_cmd1 = fork();
-	if (data->pid_cmd1 < 0)
-		return(perror("Fork"));
-	else if (data->pid_cmd1 == 0)	//On est dans le processus fils.
-		ft_exec_cmd_one(data);
-
-	 Duplication du programme again 
-	//waitpid ?
-	data->pid_cmd2 = fork();
-	if (data->pid_cmd2 < 0)
-		return(perror("Fork"));
-	if (data->pid_cmd2 == 0 && data->pid_cmd1 != 0)	//On est dans le 2e processus fils.
-		ft_exec_cmd_two(data);
-
-	close(data->fd_tube[0]);	//On ferme l'input
-	close(data->fd_tube[1]);	//On ferme l'output
-	waitpid(data->pid_cmd1, &(data->status_code1), 0);
-	waitpid(data->pid_cmd2, &(data->status_code2), 0);
-	close(data->fd_infile);
-	close(data->fd_outfile);
-	exit(EXIT_SUCCESS);*/
 }
 
 int main(int ac, char **av, char **env)
@@ -194,9 +172,8 @@ int main(int ac, char **av, char **env)
 	t_pipex	data;
 	if (ac != 5)
 	{
-		printf("Mauvais nombre d'arguments\n");
+		ft_putstr_fd("Mauvais nombre d'arguments\n", 2);
 		return 0;
 	}
 	ft_initialize_pipex(&data, av, env);
-	fprintf(stderr, "Erreur lors de l'execution du programme\n");
 }
