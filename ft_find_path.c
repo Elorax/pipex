@@ -6,7 +6,7 @@
 /*   By: abiersoh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 17:57:12 by abiersoh          #+#    #+#             */
-/*   Updated: 2021/12/01 18:51:36 by abiersoh         ###   ########.fr       */
+/*   Updated: 2021/12/04 16:41:57 by abiersoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,19 @@ char	**ft_find_path(char **envp)
 		str = ft_split(ft_strchr(envp[i], '/'), ':');
 	else
 		str = NULL;
+	if (str)
+	{
+		i = 0;
+		while (str[i])
+		{
+			str[i] = ft_strjoin(str[i], "/");	//Leaks ici
+			i++;
+		}
+	}
 	return str;
 }
 
-int main(int ac, char **av, char **envp)
+/*int main(int ac, char **av, char **envp)
 {
 	char	**str;
 	int		i;
@@ -53,4 +62,4 @@ int main(int ac, char **av, char **envp)
 	}
 
 	free(str);
-}
+}*/
