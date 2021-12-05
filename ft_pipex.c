@@ -6,7 +6,7 @@
 /*   By: abiersoh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 19:12:13 by abiersoh          #+#    #+#             */
-/*   Updated: 2021/12/05 05:25:49 by abiersoh         ###   ########.fr       */
+/*   Updated: 2021/12/05 08:19:56 by abiersoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ void	ft_pipex(t_pipex *data)
 {
 	data->pid_cmd1 = fork();
 	if (data->pid_cmd1 < 0)
-		return(perror("Fork"));
+		return (perror ("Fork"));
 	else if (data->pid_cmd1 == 0)
 		ft_exec_cmd_one(data);
 	data->pid_cmd2 = fork();
 	if (data->pid_cmd2 < 0)
-		return(perror("Fork"));
+		return (perror ("Fork"));
 	else if (data->pid_cmd2 == 0 && data->pid_cmd1 != 0)
 		ft_exec_cmd_two(data);
 	close(data->fd_tube[0]);
@@ -58,13 +58,13 @@ void	ft_init_part_one(t_pipex *data, char **av)
 		perror("open");
 	if (access(av[1], R_OK) == -1 || access(av[4], W_OK == -1))
 		perror("access");
-
 }
 
 /* Initialise la structure pipex */
 
 void	ft_initialize_pipex(t_pipex *data, char **av, char **env)
 {
+	ft_init_part_one(data, av);
 	data->av = av;
 	data->envp = env;
 	data->paths = ft_find_path(data->envp);
@@ -84,13 +84,14 @@ void	ft_initialize_pipex(t_pipex *data, char **av, char **env)
 	ft_pipex(data);
 }
 
-int main(int ac, char **av, char **env)
+int	main(int ac, char **av, char **env)
 {
 	t_pipex	data;
+
 	if (ac != 5)
 	{
 		ft_putstr_fd("Mauvais nombre d'arguments\n", 2);
-		return 0;
+		return (0);
 	}
 	ft_initialize_pipex(&data, av, env);
 }

@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abiersoh <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/05 08:20:15 by abiersoh          #+#    #+#             */
+/*   Updated: 2021/12/05 08:20:34 by abiersoh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
@@ -13,9 +24,9 @@
 
 typedef struct s_pipex
 {
-	int	fd_tube[2];
-	int	fd_infile;
-	int	fd_outfile;
+	int		fd_tube[2];
+	int		fd_infile;
+	int		fd_outfile;
 	char	**av;
 	char	**envp;
 	char	**cmd1;
@@ -23,12 +34,12 @@ typedef struct s_pipex
 	char	**paths;
 	pid_t	pid_cmd1;
 	pid_t	pid_cmd2;
-	int	status_file1;
-	int	status_file2;
-	int	status_code1;
-	int	status_code2;
-	int	cmd_exists;
-	int	path_to_use;
+	int		status_file1;
+	int		status_file2;
+	int		status_code1;
+	int		status_code2;
+	int		cmd_exists;
+	int		path_to_use;
 }	t_pipex;
 
 char	*ft_slash(char *s1);

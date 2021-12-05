@@ -6,7 +6,7 @@
 /*   By: abiersoh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 19:12:13 by abiersoh          #+#    #+#             */
-/*   Updated: 2021/12/05 05:13:29 by abiersoh         ###   ########.fr       */
+/*   Updated: 2021/12/05 05:37:46 by abiersoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_start_cmd(t_pipex *data, char **cmd_args)
 	int		i;
 	char	*cmd;
 
-	data->cmd_exists = (i = -1, 0);
+	data->cmd_exists = ((i = -1), 0);
 	while (data->paths[++i] && !(data->cmd_exists))
 	{
 		cmd = ft_strjoin(data->paths[i], cmd_args[0]);
@@ -32,7 +32,7 @@ void	ft_start_cmd(t_pipex *data, char **cmd_args)
 	}
 	if (!data->cmd_exists)
 	{
-		ft_putstr_fd("zsh: command not found: ", 2);	
+		ft_putstr_fd("zsh: command not found: ", 2);
 		ft_putendl_fd(cmd_args[0], 2);
 		return ;
 	}
@@ -47,7 +47,6 @@ void	ft_start_cmd(t_pipex *data, char **cmd_args)
 
 void	ft_exec_cmd_one(t_pipex *data)
 {
-
 	if (dup2(data->fd_infile, 0) < 0)
 	{
 		perror("dup2");

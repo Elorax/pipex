@@ -6,13 +6,9 @@
 /*   By: abiersoh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 17:57:12 by abiersoh          #+#    #+#             */
-/*   Updated: 2021/12/05 05:15:49 by abiersoh         ###   ########.fr       */
+/*   Updated: 2021/12/05 08:18:03 by abiersoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
-
-
 
 #include "pipex.h"
 
@@ -60,5 +56,5 @@ char	**ft_find_path(char **envp)
 			i++;
 		}
 	}
-	return str;
+	return (str);
 }
