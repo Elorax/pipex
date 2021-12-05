@@ -6,7 +6,7 @@
 /*   By: abiersoh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 19:12:13 by abiersoh          #+#    #+#             */
-/*   Updated: 2021/12/04 20:32:32 by abiersoh         ###   ########.fr       */
+/*   Updated: 2021/12/05 03:14:57 by abiersoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,27 +52,27 @@ void	ft_start_cmd(t_pipex *data, char **cmd_args)
 			return ;
 		if (!access(cmd, X_OK))	//verfie que la commande existe et est executable
 			data->cmd_exists = 1;
-		else
-			free(cmd);
 		data->path_to_use = i;
+		free(cmd);
 	}
 	/* Si commande non trouvee, le programme ne plante pas mais diffuse un message d'erreur */
 	if (!data->cmd_exists)
 	{
 		ft_putstr_fd("zsh: command not found: ", 2);	
 		ft_putstr_fd(cmd_args[0], 2);	
-		ft_putstr_fd("\n", 2);	
+		ft_putstr_fd("\n", 2);
+		//free(cmd);
 		return ;
 	}
-
-	/* Si commande trouvee, on l'execute */
+	cmd = ft_strjoin(data->paths[i - 1], cmd_args[0]);
+	//fprintf(stderr, "cmd : %s\n", cmd);
 	if (!cmd)
 		return ;//Gerer l'erreur
 //	fprintf(stderr, "execve(%s, &cmd_args[0], data->envp);\n", cmd);
 	execve(cmd, &(cmd_args[0]), data->envp);	//Ne revient pas si path correct.
 //	fprintf(stderr, "execve s'est mal passe\n");
 	free(cmd);	//Free si erreur
-	exit(EXIT_FAILURE);	//C'est bien ca ?
+	//exit(EXIT_FAILURE);	//C'est bien ca ?
 }
 
 /* Lance l'execution de la premiere commande */
@@ -135,6 +135,11 @@ void	ft_pipex(t_pipex *data)
 	waitpid(data->pid_cmd2, &(data->status_code2), 0);
 	close(data->fd_infile);
 	close(data->fd_outfile);
+	//Nettoyage
+	ft_free_split(data->cmd1);
+	ft_free_split(data->cmd2);
+	ft_free_split(data->paths);
+	
 	exit(EXIT_SUCCESS);
 }
 
@@ -160,10 +165,17 @@ void	ft_initialize_pipex(t_pipex *data, char **av, char **env)
 	data->paths = ft_find_path(data->envp);
 	data->cmd1 = ft_split(av[2], ' ');
 	if (!(data->cmd1))
+	{
+		ft_free_split(data->paths);
 		return ;//Erreur a gerer
+	}
 	data->cmd2 = ft_split(av[3], ' ');
 	if (!(data->cmd2))
+	{
+		ft_free_split(data->paths);
+		ft_free_split(data->cmd1);
 		return ;//Erreur a gerer
+	}
 	ft_pipex(data);
 }
 

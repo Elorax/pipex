@@ -30,7 +30,7 @@ typedef struct s_pipex
 	int	cmd_exists;
 	int	path_to_use;
 }	t_pipex;
-
+char	*ft_slash(char *s1);
 void	ft_pipex(t_pipex *data);
 void	ft_start_cmd(t_pipex *data, char **cmd_args);
 void	ft_exec_cmd_one(t_pipex *data);
