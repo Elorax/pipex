@@ -6,7 +6,7 @@
 /*   By: abiersoh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 17:57:12 by abiersoh          #+#    #+#             */
-/*   Updated: 2021/12/05 02:55:00 by abiersoh         ###   ########.fr       */
+/*   Updated: 2021/12/05 05:15:49 by abiersoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ char	*ft_slash(char *s1)
 	size = ft_strlen(s1) + 2;
 	dest = malloc(size);
 	if (!dest)
-		return (NULL);//free_split
+	{
+		free(s1);
+		return (NULL);
+	}
 	ft_strlcpy(dest, s1, size - 1);
 	free(s1);
 	ft_strlcat(dest, "/", size);
@@ -48,22 +51,14 @@ char	**ft_find_path(char **envp)
 		i = 0;
 		while (str[i])
 		{
-			str[i] = ft_slash(str[i]);	//probably leaks here
+			str[i] = ft_slash(str[i]);
+			if (!str[i])
+			{
+				ft_free_split(str);
+				return (NULL);
+			}
 			i++;
 		}
 	}
 	return str;
 }
-
-
-/*
-int main(int ac, char **av, char **env)
-{
-	int	i = 0;
-	char **str = ft_find_path(env);
-	while (str[i])
-	{
-		printf("%s\n", str[i]);
-		i++;
-	}
-}*/
